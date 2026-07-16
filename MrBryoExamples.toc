@@ -1,0 +1,45 @@
+## Interface: 120005
+## Title: MrBryo's Examples Addon
+## Notes: Just a way to view objects based on their various templates.
+## Author: mrbryo
+## Version: @project-version@
+## SavedVariables: MrBryoExamplesDB
+## OptionalDeps:
+## IconTexture: Interface\Icons\INV_Scroll_12
+## X-MrBryo-Repository: https://github.com/mrbryo/ToysByFunction
+## Category-enUS: Development Tools
+## AllowLoadGameType: mainline
+
+# Minimap Button
+# -- Called when the user clicks the compartment entry.
+## AddonCompartmentFunc: MrBryoExamplesAddon_OnClick
+# -- Called when the mouse enters the entry (show tooltip).
+## AddonCompartmentFuncOnEnter: MrBryoExamplesAddon_OnEnter
+# -- Called when the mouse leaves the entry (hide tooltip).
+## AddonCompartmentFuncOnLeave: MrBryoExamplesAddon_OnLeave
+
+# Initialize Addon
+Initialize.lua
+Minimap.lua
+
+# Language Files
+locale\enUS.lua
+locale\deDE.lua
+locale\esES.lua
+locale\frFR.lua
+locale\itIT.lua
+locale\koKR.lua
+locale\ptBR.lua
+locale\ruRU.lua
+locale\zhCN.lua
+locale\zhTW.lua
+
+# Libs
+Libs\FramePosition.lua
+
+# 3rd Party Libraries
+#@no-lib-strip@
+#@end-no-lib-strip@
+
+## Main
+Example.lua
