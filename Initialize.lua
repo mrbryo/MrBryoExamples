@@ -17,7 +17,9 @@ ns.player = {}
 -----------------------------------------------------------------------------]]
 ns.defaults = {
     profile = {
-        default = {}
+        default = {
+            mytab = "none"
+        }
     },
     global = {},
     char = {

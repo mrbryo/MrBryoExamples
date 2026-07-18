@@ -23,19 +23,23 @@ Initialize.lua
 Minimap.lua
 
 # Language Files
-locale\enUS.lua
-locale\deDE.lua
-locale\esES.lua
-locale\frFR.lua
-locale\itIT.lua
-locale\koKR.lua
-locale\ptBR.lua
-locale\ruRU.lua
-locale\zhCN.lua
-locale\zhTW.lua
+Locale\enUS.lua
+Locale\deDE.lua
+Locale\esES.lua
+Locale\frFR.lua
+Locale\itIT.lua
+Locale\koKR.lua
+Locale\ptBR.lua
+Locale\ruRU.lua
+Locale\zhCN.lua
+Locale\zhTW.lua
 
 # Libs
 Libs\FramePosition.lua
+Libs\Tabs.lua
+
+# Tabs
+Tabs\Dropdowns.lua
 
 # 3rd Party Libraries
 #@no-lib-strip@
