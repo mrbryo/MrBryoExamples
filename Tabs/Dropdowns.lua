@@ -14,114 +14,114 @@ ns.tabDropdown = {
     key = "dropdowns"
 }
 
-local function CreateGenericDropdown(parentFrame, itemOrder, items, initialValue, frameName, frameTemplate, onChange)
-    local frame = CreateFrame("Frame", nil, parentFrame, frameTemplate)
+-- local function CreateGenericDropdown(parentFrame, itemOrder, items, initialValue, frameName, frameTemplate, onChange)
+--     local frame = CreateFrame("Frame", nil, parentFrame, frameTemplate)
 
-    ns:Print("Dropdown Parent Key: " .. tostring(frame.Dropdown:GetParentKey()))
+--     ns:Print("Dropdown Parent Key: " .. tostring(frame.Dropdown:GetParentKey()))
 
-    -- local dropdown = nil
-    -- for i, childx in ipairs({frame:GetChildren()}) do
-    --     -- ns:Print(("(A) Child %d - Object Type: %s - Parent Key: %s - Children: %s"):format(i, tostring(childx:GetObjectType()), tostring(childx:GetParentKey()), tostring(childx:GetNumChildren())))
-    --     for y, childy in ipairs({childx:GetChildren()}) do
-    --         -- ns:Print(("(B) Child %d - Object Type: %s - Parent Key: %s - Children: %s"):format(y, tostring(childy:GetObjectType()), tostring(childy:GetParentKey()), tostring(childy:GetNumChildren())))
-    --         if childy:GetParentKey() == "Dropdown" then
-    --             dropdown = childy
-    --         end
-    --         -- for j, childj in ipairs({childy:GetChildren()}) do
-    --         --     ns:Print(("(C) Child %d - Object Type: %s - Parent Key: %s - Children: %s"):format(j, tostring(childj:GetObjectType()), tostring(childj:GetParentKey()), tostring(childj:GetNumChildren())))
-    --         -- end
-    --     end
-    -- end
+--     -- local dropdown = nil
+--     -- for i, childx in ipairs({frame:GetChildren()}) do
+--     --     -- ns:Print(("(A) Child %d - Object Type: %s - Parent Key: %s - Children: %s"):format(i, tostring(childx:GetObjectType()), tostring(childx:GetParentKey()), tostring(childx:GetNumChildren())))
+--     --     for y, childy in ipairs({childx:GetChildren()}) do
+--     --         -- ns:Print(("(B) Child %d - Object Type: %s - Parent Key: %s - Children: %s"):format(y, tostring(childy:GetObjectType()), tostring(childy:GetParentKey()), tostring(childy:GetNumChildren())))
+--     --         if childy:GetParentKey() == "Dropdown" then
+--     --             dropdown = childy
+--     --         end
+--     --         -- for j, childj in ipairs({childy:GetChildren()}) do
+--     --         --     ns:Print(("(C) Child %d - Object Type: %s - Parent Key: %s - Children: %s"):format(j, tostring(childj:GetObjectType()), tostring(childj:GetParentKey()), tostring(childj:GetNumChildren())))
+--     --         -- end
+--     --     end
+--     -- end
 
-    if frame.Dropdown == nil then
-        ns:Print("Dropdown Not Found!")
-    else
-        ns:Print("Dropdown Found!")
+--     if frame.Dropdown == nil then
+--         ns:Print("Dropdown Not Found!")
+--     else
+--         ns:Print("Dropdown Found!")
 
-        -- store dropdown state
-        frame.Dropdown.selectedValue = initialValue or ""
-        if items == nil then
-            frame.Dropdown.selectedText = itemOrder[initialValue] or ""
-            frame.Dropdown.items = itemOrder
-        else
-            frame.Dropdown.selectedText = items[initialValue] or ""
-            frame.Dropdown.items = items
-        end
-        frame.Dropdown.itemOrder = itemOrder
+--         -- store dropdown state
+--         frame.Dropdown.selectedValue = initialValue or ""
+--         if items == nil then
+--             frame.Dropdown.selectedText = itemOrder[initialValue] or ""
+--             frame.Dropdown.items = itemOrder
+--         else
+--             frame.Dropdown.selectedText = items[initialValue] or ""
+--             frame.Dropdown.items = items
+--         end
+--         frame.Dropdown.itemOrder = itemOrder
 
-        -- external function; change selected value
-        local function SetSelectedValue(key)
-            --@debug@
-            -- print("(CreateDropdown) SetSelectedValue called with key:", key)
-            --@end-debug@
-            if frame.Dropdown.items[key] then
-                frame.Dropdown.selectedValue = key
-                frame.Dropdown.selectedText = frame.Dropdown.items[key] or ""
-            elseif frame.Dropdown.items[key] == nil then
-                frame.Dropdown.selectedValue = key
-                frame.Dropdown.selectedText = key
-            else
-                frame.Dropdown.selectedValue = ""
-                frame.Dropdown.selectedText = ""
-            end
-            if onChange then
-                onChange(key)
-            end
-        end
+--         -- external function; change selected value
+--         local function SetSelectedValue(key)
+--             --@debug@
+--             -- print("(CreateDropdown) SetSelectedValue called with key:", key)
+--             --@end-debug@
+--             if frame.Dropdown.items[key] then
+--                 frame.Dropdown.selectedValue = key
+--                 frame.Dropdown.selectedText = frame.Dropdown.items[key] or ""
+--             elseif frame.Dropdown.items[key] == nil then
+--                 frame.Dropdown.selectedValue = key
+--                 frame.Dropdown.selectedText = key
+--             else
+--                 frame.Dropdown.selectedValue = ""
+--                 frame.Dropdown.selectedText = ""
+--             end
+--             if onChange then
+--                 onChange(key)
+--             end
+--         end
 
-        -- function to check if a value is selected
-        local function IsSelectedValue(key)
-            return frame.Dropdown.selectedValue == key
-        end
+--         -- function to check if a value is selected
+--         local function IsSelectedValue(key)
+--             return frame.Dropdown.selectedValue == key
+--         end
 
-        -- function to build the dropdown menu from the items parameter
-        local function GeneratorFunction(dropdown, rootDescription)
-            -- add buttons for each item
-            -- for key, value in pairs(dropdown.items) do
-            for key, value in pairs(dropdown.itemOrder) do
-                local radioValue = dropdown.items[value]
-                local radioKey = value
-                if items == nil then
-                    radioValue = value
-                    radioKey = key
-                end
-                rootDescription:CreateRadio(radioValue, IsSelectedValue, SetSelectedValue, radioKey)
-            end
-        end
+--         -- function to build the dropdown menu from the items parameter
+--         local function GeneratorFunction(dropdown, rootDescription)
+--             -- add buttons for each item
+--             -- for key, value in pairs(dropdown.items) do
+--             for key, value in pairs(dropdown.itemOrder) do
+--                 local radioValue = dropdown.items[value]
+--                 local radioKey = value
+--                 if items == nil then
+--                     radioValue = value
+--                     radioKey = key
+--                 end
+--                 rootDescription:CreateRadio(radioValue, IsSelectedValue, SetSelectedValue, radioKey)
+--             end
+--         end
 
-        -- setup the menu
-        frame.Dropdown:SetupMenu(GeneratorFunction)
+--         -- setup the menu
+--         frame.Dropdown:SetupMenu(GeneratorFunction)
 
-        -- external function; update function
-        function frame.Dropdown:UpdateItems(newItemOrder, newItems, newValue)
-            --@debug@
-            -- print("(CreateDropdown) New Value:", newValue)
-            --@end-debug@
-            if newItems == nil then
-                self.selectedText = newItemOrder[newValue] or ""
-                self.items = newItemOrder
-            else
-                self.selectedText = newItems[newValue] or ""
-                self.items = newItems
-            end
-            self.itemOrder = newItemOrder
-            SetSelectedValue(newValue)
-            frame.Dropdown:GenerateMenu()
-        end
+--         -- external function; update function
+--         function frame.Dropdown:UpdateItems(newItemOrder, newItems, newValue)
+--             --@debug@
+--             -- print("(CreateDropdown) New Value:", newValue)
+--             --@end-debug@
+--             if newItems == nil then
+--                 self.selectedText = newItemOrder[newValue] or ""
+--                 self.items = newItemOrder
+--             else
+--                 self.selectedText = newItems[newValue] or ""
+--                 self.items = newItems
+--             end
+--             self.itemOrder = newItemOrder
+--             SetSelectedValue(newValue)
+--             frame.Dropdown:GenerateMenu()
+--         end
 
-        -- external function; get selected value
-        function frame.Dropdown:GetSelectedValue()
-            return self.selectedValue
-        end
+--         -- external function; get selected value
+--         function frame.Dropdown:GetSelectedValue()
+--             return self.selectedValue
+--         end
 
-        -- set initial value if provided
-        if initialValue and frame.Dropdown.items[initialValue] then
-            SetSelectedValue(initialValue)
-        end
-    end
+--         -- set initial value if provided
+--         if initialValue and frame.Dropdown.items[initialValue] then
+--             SetSelectedValue(initialValue)
+--         end
+--     end
 
-    return frame
-end
+--     return frame
+-- end
 
 --[[---------------------------------------------------------------------------
     Function:   CreateDropdown
@@ -136,7 +136,14 @@ end
 -----------------------------------------------------------------------------]]
 local function CreateDropdown(parentFrame, itemOrder, items, initialValue, frameName, frameTemplate, onChange)
     -- create dropdown and set it up
-    local dropdown = CreateFrame("DropdownButton", frameName, parentFrame, frameTemplate)
+    local dropdown = nil
+    local frame = nil
+    if frameTemplate == "SettingsDropdownWithButtonsTemplate" then
+        frame = CreateFrame("Frame", nil, parentFrame, frameTemplate)
+        dropdown = frame.Dropdown
+    else
+        dropdown = CreateFrame("DropdownButton", frameName, parentFrame, frameTemplate)
+    end
 
     -- store dropdown state
     dropdown.selectedValue = initialValue or ""
@@ -220,7 +227,11 @@ local function CreateDropdown(parentFrame, itemOrder, items, initialValue, frame
     end
 
     -- return the created dropdown
-    return dropdown
+    if frameTemplate == "SettingsDropdownWithButtonsTemplate" then
+        return frame
+    else
+        return dropdown
+    end
 end
 
 --[[
@@ -384,22 +395,20 @@ local function ExampleDropdownOne(parentFrame, frameTemplate)
     dropdownLabel:SetText(ns.L["Number:"])
 
     -- create dropdown
-    local dropdown = nil
-    if frameTemplate == "Metal2DropdownWithSteppersAndLabelTemplate" then
-        dropdown = CreateGenericDropdown(frame, itemOrder, items, "one", nil, frameTemplate, OnClick)
-    else
-        dropdown = CreateDropdown(frame, itemOrder, items, "one", nil, frameTemplate, OnClick)
+    local dropdown = CreateDropdown(frame, itemOrder, items, "one", nil, frameTemplate, OnClick)
+
+    -- have to check for nil now that dropdown is instantiated as nil in the CreateDropdown function; it should never be nil though unless blizzard changes something about their templates
+    if dropdown ~= nil then
+        -- position the label and the dropdown
+        local dropdownOffset = (dropdown:GetHeight() - dropdownLabel:GetStringHeight()) / 2
+        dropdownLabel:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, -dropdownOffset)
+        dropdown:SetPoint("LEFT", dropdownLabel, "RIGHT", padding, 0)
+
+        -- set frame size
+        local width = dropdown:GetWidth() + dropdownLabel:GetWidth() + (padding * 2)
+        local height = dropdown:GetHeight() -- + (padding * 2)
+        frame:SetSize(width, height)
     end
-
-    -- position the label and the dropdown
-    local dropdownOffset = (dropdown:GetHeight() - dropdownLabel:GetStringHeight()) / 2
-    dropdownLabel:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, -dropdownOffset)
-    dropdown:SetPoint("LEFT", dropdownLabel, "RIGHT", padding, 0)
-
-    -- set frame size
-    local width = dropdown:GetWidth() + dropdownLabel:GetWidth() + (padding * 2)
-    local height = dropdown:GetHeight() + (padding * 2)
-    frame:SetSize(width, height)
 
     -- set attributes
     frame:SetAttribute(ns.example.const.template, frameTemplate)
@@ -451,7 +460,8 @@ local function BuildContent(tabKey)
     -- local object5 = ExampleDropdownOne(groupFrame, "WowStyle2IconButtonTemplate")
 
     -- attempting Metal2DropdownWithSteppersAndLabelTemplate which inherits from DropdownWithSteppersTemplate
-    local object5 = ExampleDropdownOne(groupFrame, "Metal2DropdownWithSteppersAndLabelTemplate")
+    local object5 = ExampleDropdownOne(groupFrame, "SettingsDropdownWithButtonsTemplate")
+    object5:SetAttribute(ns.example.const.note, "Yes, it is working mostly except the increment and decrement buttons are not updating correctly.")
 
     -- object5.Dropdown:SetPoint(nil, nil, nil, 0, 0)
     local object6 = ExampleDropdownOne(groupFrame, "UIPanelIconDropdownButtonTemplate")

@@ -90,6 +90,23 @@ function ns:ExampleFrame(parentFrame, object)
     -- ns:Print(("Row Height: %.1f"):format(rowHeight))
     -- groupFrame:SetHeight(rowHeight)
 
+    local note = object:GetAttribute(ns.example.const.note)
+    if note ~= nil then
+        local noteString = groupFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+        noteString:SetText(("%s%s%s %s"):format(ns.example.const.colors.white, "Note:", ns.example.const.colors.ending, note))
+        noteString:SetJustifyH("LEFT")
+        noteString:SetJustifyV("TOP")
+        if object ~= nil then
+            noteString:SetPoint("TOPLEFT", object, "BOTTOMLEFT", 0, -padding)
+            noteString:SetPoint("TOPRIGHT", object, "BOTTOMRIGHT", 0, -padding)
+            noteString:SetPoint("BOTTOMLEFT", groupFrame, "BOTTOMLEFT", 0, padding)
+        else
+            noteString:SetPoint("TOPLEFT", templateLabel, "BOTTOMLEFT", 0, -padding)
+            noteString:SetPoint("TOPRIGHT", templateLabel, "BOTTOMRIGHT", 0, -padding)
+            noteString:SetPoint("BOTTOMLEFT", groupFrame, "BOTTOMLEFT", 0, padding)
+        end
+    end
+
     -- return the frame
     return groupFrame
 end
