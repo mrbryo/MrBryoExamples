@@ -1,4 +1,4 @@
-package-as: ToysByFunction
+package-as: MrBryoExamples
 enable-nolib-creation: yes
 
 ignore:

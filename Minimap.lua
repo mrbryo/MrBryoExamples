@@ -10,7 +10,7 @@ end
 
 function MrBryoExamplesAddon_OnEnter(name, menuButtonFrame)
     GameTooltip:SetOwner(menuButtonFrame, "ANCHOR_LEFT")
-    GameTooltip:SetText("MrBryo's Examples Addon")
+    GameTooltip:SetText("MrBryo's Examples Addon", 1, 1, 1)
     GameTooltip:AddLine("Click to Open Main UI", 1, 1, 1)
     GameTooltip:Show()
 end

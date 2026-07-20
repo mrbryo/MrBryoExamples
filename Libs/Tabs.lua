@@ -10,7 +10,7 @@ local addonName, ns = ...
 ns.tabs = {
     order = {},
     name = {},
-    onload = {},
+    -- onload = {},
     buttons = {},
     buttonIndex = {},
     frames = {},
@@ -45,15 +45,21 @@ function ns.tabs:RegisterTab(parentFrame, tabKey, name, default, OnLoad)
     end
 
     -- add the function to trigger for onload
-    ns.tabs.onload[tabKey] = OnLoad
+    -- ns.tabs.onload[tabKey] = OnLoad
 
     -- check if content frame exists, if not create it
     if ns.tabs.frames[tabKey] == nil then
         -- create the frame
-        ns.tabs.frames[tabKey] = CreateFrame("Frame", nil, parentFrame) --, "InsetFrameTemplate")
-        ns.tabs.frames[tabKey]:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 0, -20)
+        local frame = CreateFrame("Frame", nil, parentFrame) --, "InsetFrameTemplate")
+        frame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", 0, -20)
         -- 2 points of Y movement aligns the main frame to the tab content frame...due to the graphical edge I think.
-        ns.tabs.frames[tabKey]:SetPoint("BOTTOMRIGHT", parentFrame, "BOTTOMRIGHT", 0, 2)
+        frame:SetPoint("BOTTOMRIGHT", parentFrame, "BOTTOMRIGHT", 0, 2)
+        -- hide it
+        frame:Hide()
+        -- set onshow to build the UI
+        frame:SetScript("OnShow", OnLoad)
+        -- assign to namespace
+        ns.tabs.frames[tabKey] = frame
     end
 end
 
@@ -151,6 +157,10 @@ function ns.tabs:ProcessTabSystem(parentFrame)
             end)
         end
 
+        --@debug@
+        ns:Print(("(tabs:ProcessTabSystem) Tab Index: %d, Tab Key: %s, Prev Tab Key: %s"):format(tabIndex, tabKey, tostring(prevTabKey)))
+        --@end-debug@
+
         -- position tabs horizontally with proper spacing for Collections style
         if tabIndex == 1 then
             ns.tabs.buttons[tabKey]:SetPoint("TOPLEFT", parentFrame, "BOTTOMLEFT", 11, 2)
@@ -185,6 +195,7 @@ function ns.tabs:GetTab()
 
     if tabValue == nil then
         ns.tabs:SetTab(ns.tabs.defaultTab)
+        tabValue = ns.tabs.defaultTab
     end
 
     --@debug@
@@ -211,7 +222,16 @@ end
     Purpose:    Return the frame for the tab.
 -----------------------------------------------------------------------------]]
 function ns.tabs:GetFrame(tabKey)
-    return ns.tabs.frames[tabKey]
+    -- get the frame
+    local frame = ns.tabs.frames[tabKey]
+
+    -- check for nil and report error
+    if frame == nil then
+        ns:Print((ns.L["Error: Tab Frame for key '%s' is not Initialized! Reload your game (/reload) and if it happens again please open a ticket."]):format(tabKey))
+    end
+
+    -- not nil if gets to here so return it
+    return frame
 end
 
 --[[---------------------------------------------------------------------------

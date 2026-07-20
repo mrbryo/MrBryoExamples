@@ -246,6 +246,10 @@ local function SetupSlashCommands()
         elseif command == "dbclear" then
             MrBryoExamplesDB = {}
             ns:Print("Database Cleared - Do a reload so the Addon initializes the DB again.")
+        elseif command == "tbt" then
+            ns:Print("Populating Template Databased with by Types Structure...")
+            ns.templates:RestructureData()
+            ns:Print("Population by Type is Done")
         elseif command == "" then
             ns:ShowUI()
         else

@@ -1,4 +1,4 @@
-# ToysByFunction
+# Basics of World of Warcraft (WoW) Development
 
 ## Critical: WoW 12.0 Midnight API Rules
 

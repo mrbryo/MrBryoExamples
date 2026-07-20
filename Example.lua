@@ -13,6 +13,7 @@ ns.example = {
     const = {
         template = "ExampleTemplateType",
         frameType = "ExampleFrameType",
+        note = "ExampleNote",
         padding = 10,
 
         -- colors
@@ -34,10 +35,72 @@ ns.example = {
     }
 }
 
+-- properly get frame attribute to check for nil or attribute which doesn't exist
+function ns:GetAttribute(uiobject, attribute)
+    if uiobject == nil then
+        return ns.L["NIL Object"]
+    else
+        local attrValue = uiobject:GetAttribute(attribute)
+        if attrValue == nil then
+            return ns.L["Missing Attribute"]
+        else
+            return attrValue
+        end
+    end
+end
 
+function ns:ExampleFrame(parentFrame, object)
+    -- standard variables
+    local padding = ns.example.const.padding
+
+    -- content frame
+    local groupFrame = CreateFrame("Frame", nil, parentFrame, "InsetFrameTemplate")
+    groupFrame:SetFrameStrata("MEDIUM")
+    local bg = groupFrame:CreateTexture(nil, "BACKGROUND")
+    bg:SetAllPoints(groupFrame)
+    bg:SetColorTexture(0, 0, 0, 0.7) -- Black, 80% opaque
+
+    -- get object attributes
+    local frameType = ns:GetAttribute(object, ns.example.const.frameType)
+    local frameTemplate = ns:GetAttribute(object, ns.example.const.template)
+
+    -- add text about object
+    local frameLabel = groupFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+    frameLabel:SetText(("%s%s%s %s"):format(ns.example.const.colors.white, "Frame Type:", ns.example.const.colors.ending, frameType))
+    frameLabel:SetJustifyH("LEFT")
+    frameLabel:SetWordWrap(true)
+    frameLabel:SetPoint("TOPLEFT", groupFrame, "TOPLEFT", padding, -padding)
+    frameLabel:SetPoint("TOPRIGHT", groupFrame, "TOPRIGHT", -padding, -padding)
+    local templateLabel = groupFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+    templateLabel:SetText(("%s%s%s %s"):format(ns.example.const.colors.white, "Frame Template", ns.example.const.colors.ending, frameTemplate))
+    templateLabel:SetJustifyH("LEFT")
+    templateLabel:SetWordWrap(true)
+    templateLabel:SetPoint("TOPLEFT", frameLabel, "BOTTOMLEFT", 0, -padding)
+    templateLabel:SetPoint("TOPRIGHT", frameLabel, "BOTTOMRIGHT", 0, -padding)
+    -- rowHeight = rowHeight + frameLabel:GetStringHeight() + templateLabel:GetStringHeight() + (padding * 2)
+
+    -- set the top left corder to the previous object
+    if object ~= nil then
+        object:SetPoint("TOPLEFT", templateLabel, "BOTTOMLEFT", 0, -padding)
+        object:SetPoint("TOPRIGHT", templateLabel, "BOTTOMRIGHT", 0, -padding)
+    end
+    -- rowHeight = rowHeight + object:GetHeight()
+
+    -- set row height
+    -- ns:Print(("Row Height: %.1f"):format(rowHeight))
+    -- groupFrame:SetHeight(rowHeight)
+
+    -- return the frame
+    return groupFrame
+end
 
 function ns:ShowUI()
     local frameName = "MainFrame"
+
+    -- if the MainFrame is not nil then exit early as the UI is already built
+    if ns.example.ui.frames.MainFrame ~= nil then return end
+
+    -- only create if frame is nil
     local mainFrame = CreateFrame("Frame", nil, UIParent, "BasicFrameTemplate")
     frameWidth = 800
     frameHeight = 600
@@ -59,7 +122,7 @@ function ns:ShowUI()
 
     -- instantiate the tabs
     ns.tabDropdown:SetupTabDropdowns(mainFrame)
-
+    ns.tabButton:SetupTabButtons(mainFrame)
 
     -- draw the tabs
     ns.tabs:ProcessTabSystem(mainFrame)

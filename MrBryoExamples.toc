@@ -3,7 +3,7 @@
 ## Notes: Just a way to view objects based on their various templates.
 ## Author: mrbryo
 ## Version: @project-version@
-## SavedVariables: MrBryoExamplesDB
+## SavedVariables: MrBryoExamplesDB, MrBryoTemplateDB
 ## OptionalDeps:
 ## IconTexture: Interface\Icons\INV_Scroll_12
 ## X-MrBryo-Repository: https://github.com/mrbryo/ToysByFunction
@@ -21,6 +21,8 @@
 # Initialize Addon
 Initialize.lua
 Minimap.lua
+BlizzardFrameTemplates.lua
+Templates.lua
 
 # Language Files
 Locale\enUS.lua
@@ -40,6 +42,7 @@ Libs\Tabs.lua
 
 # Tabs
 Tabs\Dropdowns.lua
+Tabs\Buttons.lua
 
 # 3rd Party Libraries
 #@no-lib-strip@
