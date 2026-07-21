@@ -17,7 +17,7 @@ ns.tabFrame = {
     nilcount = 0,
 }
 
-local function ExampleFrameType(parentFrame, frameTemplate, width, height, backdrop)
+local function ExampleFrameType(parentFrame, frameTemplate, width, height, backdrop, title, portrait)
     -- determine object key
     local objectKey = frameTemplate
     if objectKey == nil then
@@ -52,6 +52,14 @@ local function ExampleFrameType(parentFrame, frameTemplate, width, height, backd
         frameExample:SetBackdrop(backdrop)
         frameExample:SetBackdropColor(0, 0, 0, 1)       -- black, fully opaque
         frameExample:SetBackdropBorderColor(1, 1, 1, 1) -- white border
+    end
+
+    -- if the frame has a portrait, set it and its title
+    if portrait ~= nil then
+        frameExample:SetPortraitToAsset(portrait)
+    end
+    if title ~= nil then
+        frameExample:SetTitle(title)
     end
 
     -- set attributes
@@ -281,8 +289,142 @@ local function BuildContent(tabKey)
     groupFrame:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", padding, -padding)
     groupFrame:SetPoint("BOTTOMRIGHT", parentFrame, "BOTTOMRIGHT", -padding, padding)
 
-    -- create the scroll
-    CreateScroll(groupFrame)
+    -- add scroll frame to right hand side
+    local rightScrollFrame = CreateFrame("ScrollFrame", nil, groupFrame, "UIPanelScrollFrameTemplate")
+    rightScrollFrame:SetPoint("TOPLEFT", groupFrame, "TOPLEFT", 5, -5)
+    rightScrollFrame:SetPoint("BOTTOMRIGHT", groupFrame, "BOTTOMRIGHT", -27, 5)
+
+    -- add scroll content frame
+    local rightScrollContentFrame = CreateFrame("Frame", nil, rightScrollFrame)
+    rightScrollContentFrame:SetSize(rightScrollFrame:GetWidth() - 20, groupFrame:GetHeight() - 10)
+    rightScrollFrame:SetScrollChild(rightScrollContentFrame)
+
+    local frames = {
+        {
+            cols = {
+                {
+                    template = "BackdropTemplate",
+                    backdrop = {
+                        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+                        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+                        tile = true,
+                        tileSize = 16,
+                        edgeSize = 16,
+                        insets = { left = 4, right = 4, top = 4, bottom = 4 },
+                    }
+                },
+                { template = "ButtonFrameTemplate", height = 150, title = "ButtonFrameTemplate", portrait = "Interface\\Icons\\INV_Scroll_12" },
+            },
+            rowNbr = 1,
+        },{
+            cols = {
+                { template = "DefaultPanelTemplate", height = 100 },
+                { template = "DefaultPanelFlatTemplate", height = 100 },
+            },
+            rowNbr = 2,
+        },{
+            cols = {
+                { template = "BasicFrameTemplate", height = 100 },
+                { template = "BasicFrameTemplateWithInset", height = 100 },
+            },
+            rowNbr = 3,
+        },{
+            cols = {
+                { template = "DialogBorderTemplate" },
+                { template = "DialogBorderTranslucentTemplate", height = 150 },
+            },
+            rowNbr = 4,
+        },{
+            cols = {
+                { template = "TranslucentFrameTemplate" },
+                { template = "InsetFrameTemplate", height = 150 },
+            },
+            rowNbr = 5,
+        },{
+            cols = {
+                { template = "InsetFrameTemplate3" },
+                { template = "TooltipBorderedFrameTemplate", height = 150 },
+            },
+            rowNbr = 6,
+        },{
+            cols = {
+                { template = "UIPanelDialogTemplate", height = 150 },
+                { template = "PortraitFrameTemplate", height = 150, title = "PortraitFrameTemplate", portrait = "Interface\\Icons\\INV_Scroll_12" },
+            },
+            rowNbr = 7,
+        },{
+            cols = {
+                { template = "PortraitFrameFlatTemplate", height = 150, title = "PortraitFrameFlatTemplate", portrait = "Interface\\Icons\\INV_Scroll_12" },
+                { template = nil },
+            },
+            rowNbr = 8,
+        },
+    }
+
+    -- determine width of each cell
+    local colCount = 2
+    local rowCount = #frames
+    local width = (rightScrollContentFrame:GetWidth() - ((colCount - 1) * padding)) / colCount
+
+    -- loop over frames
+    for _, rowData in ipairs(frames) do
+        -- create frame for the row
+        local rowKey = ("ROW%d"):format(rowData.rowNbr)
+
+        -- create row frame
+        local row = CreateFrame("Frame", nil, rightScrollContentFrame)
+
+        -- set position based on row number
+        if rowData.rowNbr == 1 then
+            row:SetPoint("TOPLEFT", rightScrollContentFrame, "TOPLEFT", 0, 0)
+            row:SetPoint("TOPRIGHT", rightScrollContentFrame, "TOPRIGHT", 0, padding)
+        else
+            local prevRowKey = ("ROW%d"):format(rowData.rowNbr - 1)
+            row:SetPoint("TOPLEFT", ns.tabFrame.objects[prevRowKey], "BOTTOMLEFT", 0, -padding)
+            row:SetPoint("TOPRIGHT", ns.tabFrame.objects[prevRowKey], "BOTTOMRIGHT", 0, -padding)
+        end
+
+        -- local teststr = row:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+        -- teststr:SetText("Test")
+        -- teststr:SetPoint("TOPLEFT", row, "TOPLEFT", padding, -padding)
+
+        -- keep track of previous column object
+        local previousObject = nil
+
+        -- need to determine max height
+        local maxHeight = 0
+
+        -- loop over each column
+        for colNbr, colData in ipairs(rowData.cols) do
+            -- create the example frame with example frame object in it
+            local example = ExampleFrameType(row, colData.template, width, colData.height, colData.backdrop, colData.title, colData.portrait)
+            maxHeight = math.max(maxHeight, example:GetHeight())
+
+            if previousObject == nil then
+                example:SetPoint("TOPLEFT", row, "TOPLEFT", 0, 0)
+                ns:Print(("(Frames.PopulateRow:Col 1:%d) Row: %d; Template: %s; Width: %d; Height: %d"):format(colNbr, rowData.rowNbr, tostring(colData.template), width, maxHeight))
+            else
+                example:SetPoint("TOPLEFT", previousObject, "TOPRIGHT", padding, 0)
+                ns:Print(("(Frames.PopulateRow:Col N:%d) Row: %d; Template: %s; Width: %d; Height: %d"):format(colNbr, rowData.rowNbr, tostring(colData.template), width, maxHeight))
+            end
+            example:SetWidth(width)
+
+            -- remember current example frame
+            previousObject = example
+        end
+
+        -- set the row height
+        row:SetHeight(maxHeight)
+
+        -- assign the row for future reference
+        ns.tabFrame.objects[rowKey] = row
+
+        -- set height
+        -- frame:SetHeight(maxHeight + padding)
+
+        -- store height
+        -- ns.tabFrame.rowHeight[data.rowNbr] = maxHeight
+    end
 
     -- determine width and height and assign it to each frame
     -- local width = (parentFrame:GetWidth() - (padding * (cols + 1))) / cols
@@ -292,9 +434,6 @@ local function BuildContent(tabKey)
     --         frames[rowNbr][colNbr]:SetSize(width, height)
     --     end
     -- end
-
-    -- trigger data populate
-    PopulateData()
 
     -- assign to namespace
     ns.tabFrame.groupFrame = groupFrame
