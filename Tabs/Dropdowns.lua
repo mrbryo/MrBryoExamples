@@ -2,7 +2,7 @@
 	Title: 			Dropdowns.lua
 	Author: 		mrbryo
 	Create Date : 	2026-Jul-17
-	Description: 	All tab functions for the addon.
+	Description: 	Build the dropdown tab.
 -----------------------------------------------------------------------------]]
 
 -- TODO: for the translation of the name make sure to setup your language files appropriotly
@@ -461,7 +461,7 @@ local function BuildContent(tabKey)
 
     -- attempting Metal2DropdownWithSteppersAndLabelTemplate which inherits from DropdownWithSteppersTemplate
     local object5 = ExampleDropdownOne(groupFrame, "SettingsDropdownWithButtonsTemplate")
-    object5:SetAttribute(ns.example.const.note, "Yes, it is working mostly except the increment and decrement buttons are not updating correctly.")
+    object5:SetAttribute(ns.example.const.note, "Yes, it is working mostly except the increment and decrement buttons are not updating correctly. After further research it seems Blizzard only created it for the Settings UI in the game. I would have to completely recreate the objects and make it more generic. I don't think this style is important enough (for now) to do the creation of it. However, it could be as simple as updating the OnClick of the Increment and Decrement buttons.")
 
     -- object5.Dropdown:SetPoint(nil, nil, nil, 0, 0)
     local object6 = ExampleDropdownOne(groupFrame, "UIPanelIconDropdownButtonTemplate")

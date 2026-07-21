@@ -43,6 +43,7 @@ Libs\Tabs.lua
 # Tabs
 Tabs\Dropdowns.lua
 Tabs\Buttons.lua
+Tabs\Frames.lua
 
 # 3rd Party Libraries
 #@no-lib-strip@

@@ -77,35 +77,40 @@ function ns:ExampleFrame(parentFrame, object)
     templateLabel:SetWordWrap(true)
     templateLabel:SetPoint("TOPLEFT", frameLabel, "BOTTOMLEFT", 0, -padding)
     templateLabel:SetPoint("TOPRIGHT", frameLabel, "BOTTOMRIGHT", 0, -padding)
-    -- rowHeight = rowHeight + frameLabel:GetStringHeight() + templateLabel:GetStringHeight() + (padding * 2)
+    local rowHeight = frameLabel:GetStringHeight() + templateLabel:GetStringHeight() + (padding * 2)
 
     -- set the top left corder to the previous object
     if object ~= nil then
         object:SetPoint("TOPLEFT", templateLabel, "BOTTOMLEFT", 0, -padding)
         object:SetPoint("TOPRIGHT", templateLabel, "BOTTOMRIGHT", 0, -padding)
-    end
-    -- rowHeight = rowHeight + object:GetHeight()
 
-    -- set row height
-    -- ns:Print(("Row Height: %.1f"):format(rowHeight))
-    -- groupFrame:SetHeight(rowHeight)
+        -- place note if the attribute exists
+        local note = object:GetAttribute(ns.example.const.note)
+        if note ~= nil then
+            local noteString = groupFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+            noteString:SetText(("%s%s%s %s"):format(ns.example.const.colors.white, "Note:", ns.example.const.colors.ending, note))
+            noteString:SetJustifyH("LEFT")
+            noteString:SetJustifyV("TOP")
+            if object ~= nil then
+                noteString:SetPoint("TOPLEFT", object, "BOTTOMLEFT", 0, -padding)
+                noteString:SetPoint("TOPRIGHT", object, "BOTTOMRIGHT", 0, -padding)
+                noteString:SetPoint("BOTTOMLEFT", groupFrame, "BOTTOMLEFT", 0, padding)
+            else
+                noteString:SetPoint("TOPLEFT", templateLabel, "BOTTOMLEFT", 0, -padding)
+                noteString:SetPoint("TOPRIGHT", templateLabel, "BOTTOMRIGHT", 0, -padding)
+                noteString:SetPoint("BOTTOMLEFT", groupFrame, "BOTTOMLEFT", 0, padding)
+            end
 
-    local note = object:GetAttribute(ns.example.const.note)
-    if note ~= nil then
-        local noteString = groupFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
-        noteString:SetText(("%s%s%s %s"):format(ns.example.const.colors.white, "Note:", ns.example.const.colors.ending, note))
-        noteString:SetJustifyH("LEFT")
-        noteString:SetJustifyV("TOP")
-        if object ~= nil then
-            noteString:SetPoint("TOPLEFT", object, "BOTTOMLEFT", 0, -padding)
-            noteString:SetPoint("TOPRIGHT", object, "BOTTOMRIGHT", 0, -padding)
-            noteString:SetPoint("BOTTOMLEFT", groupFrame, "BOTTOMLEFT", 0, padding)
-        else
-            noteString:SetPoint("TOPLEFT", templateLabel, "BOTTOMLEFT", 0, -padding)
-            noteString:SetPoint("TOPRIGHT", templateLabel, "BOTTOMRIGHT", 0, -padding)
-            noteString:SetPoint("BOTTOMLEFT", groupFrame, "BOTTOMLEFT", 0, padding)
+            -- include note height
+            rowHeight = rowHeight + noteString:GetStringHeight()
         end
+
+        -- add height
+        rowHeight = rowHeight + object:GetHeight() + (padding * 1)
     end
+
+    -- set height
+    groupFrame:SetHeight(rowHeight)
 
     -- return the frame
     return groupFrame
@@ -140,6 +145,7 @@ function ns:ShowUI()
     -- instantiate the tabs
     ns.tabDropdown:SetupTabDropdowns(mainFrame)
     ns.tabButton:SetupTabButtons(mainFrame)
+    ns.tabFrame:SetupTabFrames(mainFrame)
 
     -- draw the tabs
     ns.tabs:ProcessTabSystem(mainFrame)
